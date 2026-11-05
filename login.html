@@ -1,0 +1,20 @@
+<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ورود آنلاین | SEN SPORT</title><style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#08130e;color:#f1f7ef;font:16px Tahoma,Arial;display:grid;place-items:center;padding:18px}.card{width:min(100%,480px);background:#102219;border:1px solid #294333;border-radius:20px;padding:24px}.brand{font-size:25px;font-weight:bold;color:#b7f34a}h1{font-size:22px}p{line-height:1.8;color:#a4b8a9}label{display:block;margin:14px 0 6px}input,button{width:100%;padding:13px;border-radius:10px;font:inherit;margin-top:7px}input{background:#08150e;border:1px solid #42664a;color:white}button{border:0;background:#b7f34a;color:#102016;font-weight:bold;cursor:pointer}.alt{background:#203c2b;color:white;border:1px solid #42664a}.msg{margin-top:14px;line-height:1.8}.links{display:flex;gap:10px;margin-top:16px}.links a{color:#b7f34a}
+</style></head><body><main class="card"><div class="brand">⚽ SEN SPORT</div><h1>ورود / ثبت‌نام آنلاین</h1><p>حساب مربی یا بازیکن خود را با ایمیل وارد کنید. این صفحه پس از تنظیم Supabase به سرویس احراز هویت آنلاین متصل می‌شود.</p>
+<label>ایمیل</label><input id="email" type="email" autocomplete="email" placeholder="name@example.com">
+<label>رمز عبور</label><input id="password" type="password" autocomplete="current-password" minlength="8" placeholder="حداقل ۸ کاراکتر">
+<button id="login">ورود</button><button class="alt" id="signup">ثبت‌نام</button><button class="alt" id="logout">خروج از حساب</button><div id="msg" class="msg"></div><div class="links"><a href="sen-sport-dashboard.html">رفتن به داشبورد</a></div>
+</main>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+import config from './supabase-config.js';
+const msg=document.querySelector('#msg');const say=(s)=>msg.textContent=s;
+if(!config.url||!config.anonKey||config.url.includes('YOUR_')){say('⏳ اتصال هنوز تنظیم نشده است. ابتدا پروژه Supabase و URL و کلید anon را در فایل supabase-config.js قرار دهید.');document.querySelectorAll('button').forEach(b=>b.disabled=true)}
+else{
+const sb=createClient(config.url,config.anonKey);
+document.querySelector('#login').onclick=async()=>{say('در حال ورود...');const {error}=await sb.auth.signInWithPassword({email:email.value,password:password.value});say(error?'خطا: '+error.message:'ورود موفق؛ حساب تأیید شد. اکنون داشبورد را باز کنید.')};
+document.querySelector('#signup').onclick=async()=>{say('در حال ثبت‌نام...');const {error}=await sb.auth.signUp({email:email.value,password:password.value});say(error?'خطا: '+error.message:'ثبت‌نام انجام شد؛ ایمیل تأیید را بررسی کنید.')};
+document.querySelector('#logout').onclick=async()=>{const {error}=await sb.auth.signOut();say(error?'خطا: '+error.message:'از حساب خارج شدید.')};
+sb.auth.getSession().then(({data})=>{if(data.session)say('شما وارد حساب هستید: '+data.session.user.email)});
+}
+</script></body></html>
