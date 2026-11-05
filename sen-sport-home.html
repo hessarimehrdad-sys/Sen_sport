@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SEN SPORT</title>
+<style>
+:root{--g:#20f34b}*{box-sizing:border-box}body{margin:0;background:#020b06;color:#fff;font-family:Tahoma,Arial}
+.hero{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 20% 80%,#07582b,#021409 48%,#010503);position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(transparent 70%,#020b06),repeating-linear-gradient(110deg,transparent 0 90px,#0aff2410 92px 94px)}
+.wrap{position:relative;width:min(100%,950px);display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}
+.brand{text-align:center;padding:20px}.logo{font-size:70px;filter:drop-shadow(0 0 12px #19f34a)}
+h1{direction:ltr;font-size:clamp(40px,7vw,75px);margin:8px 0;font-weight:900}h1 b{color:var(--g)}.sub{direction:ltr;letter-spacing:4px;font-size:12px;color:#c8d8cc}.slogan{font-size:20px;margin-top:22px}
+.panel{background:#001007dc;border:1px solid var(--g);border-radius:24px;padding:28px;box-shadow:0 0 35px #00ff2820;backdrop-filter:blur(10px)}
+.panel h2{margin:0 0 10px}.panel p{color:#cbd9ce;margin-bottom:22px}
+button{width:100%;padding:17px;margin:8px 0;border-radius:14px;background:#031c0b;color:white;border:1px solid var(--g);font:bold 17px Tahoma;cursor:pointer}
+button.primary{background:linear-gradient(120deg,#2cff55,#0dbb38);color:#001807;border:0}
+button:hover{filter:brightness(1.12)}.change{display:inline-block;margin-top:16px;color:#9cffb3;cursor:pointer;text-decoration:underline;font-size:14px}input{display:none}.msg{font-size:12px;text-align:center;color:#9eb5a4;margin-top:12px}
+@media(max-width:680px){.wrap{grid-template-columns:1fr;gap:10px}.brand{padding:0}.logo{font-size:52px}h1{font-size:48px}.panel{padding:22px}}
+</style></head><body>
+<main class="hero" id="hero"><div class="wrap">
+<section class="brand"><div class="logo">🛡️⚽</div><h1><b>SEN</b> SPORT</h1><div class="sub">FOOTBALL TEAM MANAGEMENT</div><div class="slogan">مدیریت حرفه‌ای تیم فوتبال</div>
+<label class="change" for="photo">📷 تغییر تصویر صفحه</label><input id="photo" type="file" accept="image/*"></section>
+<section class="panel"><h2>به <span style="color:var(--g)">SEN SPORT</span> خوش آمدید</h2><p>همراه تیم خود برای قهرمانی</p>
+<button class="primary" onclick="msg('صفحه ورود در مرحله بعد ساخته می‌شود.')">ورود به حساب کاربری</button>
+<button onclick="msg('فرم ثبت‌نام مربی در مرحله بعد ساخته می‌شود.')">ثبت‌نام مربی جدید</button>
+<button onclick="msg('ورود بازیکنان در مرحله بعد ساخته می‌شود.')">ورود بازیکنان</button><div class="msg" id="msg">صفحه آغاز SEN SPORT</div></section>
+</div></main>
+<script>
+document.getElementById('photo').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{const el=document.getElementById('hero');el.style.backgroundImage='linear-gradient(90deg,#0008,#000b),url("'+r.result+'")';el.style.backgroundSize='cover';el.style.backgroundPosition='center'};r.readAsDataURL(f)});
+function msg(t){document.getElementById('msg').textContent=t}
+</script></body></html>
