@@ -58,4 +58,5 @@ function saveLocalOnly(){localStorage.setItem('senSportV2',JSON.stringify(db))}
 supabase.auth.onAuthStateChange((_event,session)=>{cloudUser=session?.user||null});
 
 render();
+if(new URLSearchParams(location.search).has('login')){document.getElementById('home').classList.add('hidden');document.getElementById('auth').classList.remove('hidden');cloudRefresh().catch(e=>cloudMsg('خطا: '+e.message));}
 </script></body></html>
