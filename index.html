@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SEN SPORT | مدیریت تیم فوتبال</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;color:#fff;background:#03140b}
+.hero{min-height:100vh;position:relative;display:flex;align-items:center;justify-content:center;padding:28px;background:radial-gradient(ellipse at 20% 25%,#0d5732 0,transparent 35%),radial-gradient(ellipse at 85% 80%,#07552a 0,transparent 38%),linear-gradient(135deg,#020805,#052515 55%,#010604);overflow:hidden}
+.hero:before{content:"";position:absolute;inset:0;background-image:var(--bg);background-size:cover;background-position:center;opacity:.38}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#001008aa,#00100855,#001008bb)}
+.content{position:relative;z-index:2;width:min(100%,980px);display:grid;grid-template-columns:1fr 420px;gap:40px;align-items:center}
+.brand{text-align:center}.crest{width:120px;height:120px;border:4px solid #40ff62;border-radius:35% 35% 50% 50%;display:grid;place-items:center;margin:auto;font-size:65px;box-shadow:0 0 30px #19f94a55}
+h1{font-size:clamp(40px,7vw,76px);direction:ltr;margin:18px 0;color:#fff;letter-spacing:2px}h1 span{color:#39ff57}.tag{font-size:22px;color:#d7e9dc}
+.panel{padding:30px;border:1px solid #36ef59;border-radius:26px;background:#00180de8;box-shadow:0 0 35px #20ff4830;text-align:center}
+.panel h2{font-size:25px;margin:0 0 10px}.panel p{color:#b9d4c2;margin:0 0 24px}
+.btn{width:100%;padding:17px 15px;margin:8px 0;border-radius:16px;border:1px solid #42f45f;background:#061b0d;color:white;font-size:18px;font-weight:bold;cursor:pointer}
+.btn.primary{background:#39e94f;color:#031008;border:0}.btn:hover{filter:brightness(1.12)}
+.tools{display:flex;justify-content:center;gap:10px;margin-top:18px}.tools button{background:#061b0d;color:#d8ffe1;border:1px solid #3c9850;border-radius:12px;padding:10px 14px;cursor:pointer}
+#photo{display:none}footer{text-align:center;color:#7fa58a;margin-top:22px;font-size:13px}
+.modal{display:none;position:fixed;inset:0;background:#000b;z-index:10;align-items:center;justify-content:center;padding:20px}.modal.show{display:flex}.box{width:min(100%,420px);background:#061b0d;border:1px solid #36ef59;border-radius:20px;padding:25px}.box input{width:100%;padding:13px;margin:8px 0;border-radius:10px;border:1px solid #39794a;background:#001008;color:white;font-size:16px}.close{float:left;background:none;border:0;color:white;font-size:24px;cursor:pointer}
+@media(max-width:760px){.content{grid-template-columns:1fr;gap:25px}.brand{padding:10px}.crest{width:90px;height:90px;font-size:48px}.panel{padding:22px}h1{font-size:48px}.tag{font-size:17px}}
+</style></head>
+<body>
+<main class="hero" id="hero">
+<div class="content">
+<section class="brand"><div class="crest">⚽</div><h1><span>SEN</span> SPORT</h1><div class="tag">مدیریت حرفه‌ای تیم فوتبال</div></section>
+<section class="panel"><h2>به <span style="color:#39ff57">SEN SPORT</span> خوش آمدید</h2><p>همراه تیم خود برای قهرمانی</p>
+<button class="btn primary" onclick="openModal('login')">ورود به حساب کاربری</button>
+<button class="btn" onclick="openModal('signup')">ثبت‌نام مربی جدید</button>
+<button class="btn" onclick="openModal('player')">ورود بازیکنان</button>
+<div class="tools"><button onclick="document.getElementById('photo').click()">🖼 تغییر عکس صفحه</button><button onclick="resetPhoto()">عکس پیش‌فرض</button></div>
+<input id="photo" type="file" accept="image/*" onchange="setPhoto(event)">
+<footer>با هم برای موفقیت • SEN SPORT</footer></section></div></main>
+<div class="modal" id="modal"><div class="box"><button class="close" onclick="closeModal()">×</button><h2 id="modalTitle">ورود</h2><form onsubmit="submitForm(event)"><input id="email" type="email" placeholder="ایمیل" required><input id="password" type="password" placeholder="رمز عبور (حداقل ۶ کاراکتر)" minlength="6" required><button class="btn primary" type="submit">ادامه</button></form><p id="notice" style="color:#b9d4c2"></p></div></div>
+<script>
+let mode='login';function openModal(m){mode=m;document.getElementById('modalTitle').textContent=m==='signup'?'ثبت‌نام مربی':m==='player'?'ورود بازیکن':'ورود به حساب';document.getElementById('notice').textContent=m==='player'?'ورود بازیکنان در نسخه بعد فعال می‌شود.':'';document.getElementById('modal').classList.add('show')}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+function submitForm(e){e.preventDefault();document.getElementById('notice').textContent='صفحه نمایشی آماده است؛ اتصال حساب آنلاین در مرحله بعد اضافه می‌شود.'}
+function setPhoto(e){const f=e.target.files[0];if(!f)return;const url=URL.createObjectURL(f);document.getElementById('hero').style.setProperty('--bg','url("'+url+'")')}
+function resetPhoto(){document.getElementById('hero').style.removeProperty('--bg');document.getElementById('photo').value=''}
+</script></body></html>
