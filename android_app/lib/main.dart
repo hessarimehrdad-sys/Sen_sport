@@ -1,83 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() => runApp(const SenSportApp());
-
-const navy = Color(0xFF101B35);
-const green = Color(0xFF20C997);
-
-class SenSportApp extends StatelessWidget {
-  const SenSportApp({super.key});
-  @override
-  Widget build(BuildContext context) => MaterialApp(
-    debugShowCheckedModeBanner: false,
-    title: 'SenSport',
-    locale: const Locale('fa'),
-    supportedLocales: const [Locale('fa'), Locale('en')],
-    localizationsDelegates: const [
-      GlobalMaterialLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate,
-      GlobalCupertinoLocalizations.delegate,
-    ],
-    theme: ThemeData(useMaterial3: true, colorScheme: ColorScheme.fromSeed(seedColor: green), fontFamily: 'Roboto'),
-    home: const PlayerHome(),
-  );
+const navy=Color(0xFF101B35), green=Color(0xFF20C997);
+void main()=>runApp(const SenSportApp());
+class SenSportApp extends StatelessWidget {const SenSportApp({super.key}); @override Widget build(BuildContext c)=>MaterialApp(debugShowCheckedModeBanner:false,title:'SenSport',locale:const Locale('fa'),supportedLocales:const[Locale('fa'),Locale('en')],localizationsDelegates:const[GlobalMaterialLocalizations.delegate,GlobalWidgetsLocalizations.delegate,GlobalCupertinoLocalizations.delegate],theme:ThemeData(useMaterial3:true,colorScheme:ColorScheme.fromSeed(seedColor:green),fontFamily:'Roboto'),home:const Directionality(textDirection:TextDirection.rtl,child:LoginPage()));}
+class Store {
+ static List<String> sessions=[], attendance=[], payments=[], messages=[], notes=[];
+ static Future<void> load() async {final p=await SharedPreferences.getInstance();sessions=p.getStringList('sessions')??['تمرین تاکتیکی • دوشنبه ۱۸:۰۰','تمرین بدنسازی • چهارشنبه ۱۷:۳۰'];attendance=p.getStringList('attendance')??[];payments=p.getStringList('payments')??[];messages=p.getStringList('messages')??[];notes=p.getStringList('notes')??[];}
+ static Future<void> save(String k,List<String> v)async{final p=await SharedPreferences.getInstance();await p.setStringList(k,v);}
 }
-
-class PlayerHome extends StatelessWidget {
-  const PlayerHome({super.key});
-  @override
-  Widget build(BuildContext context) => Directionality(
-    textDirection: TextDirection.rtl,
-    child: Scaffold(
-      backgroundColor: const Color(0xFFF4F6FA),
-      appBar: AppBar(
-        backgroundColor: navy, foregroundColor: Colors.white,
-        title: const Text('SenSport  |  پنل بازیکن', style: TextStyle(fontWeight: FontWeight.bold)),
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_none))],
-      ),
-      body: ListView(padding: const EdgeInsets.all(16), children: [
-        Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(color: navy, borderRadius: BorderRadius.circular(22)),
-          child: const Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('خوش آمدی بازیکن 👋', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
-            SizedBox(height: 8), Text('برای پیشرفت، هر روز یک قدم جلوتر', style: TextStyle(color: Colors.white70)),
-            SizedBox(height: 18), Row(children: [
-              Icon(Icons.sports_soccer, color: green, size: 36),
-              SizedBox(width: 10), Text('تمرین کن • پیشرفت کن • بدرخش', style: TextStyle(color: green, fontWeight: FontWeight.bold))
-            ])
-          ]),
-        ),
-        const SizedBox(height: 16),
-        const Row(children: [Expanded(child: StatCard(title:'حضور در تمرین',value:'—',icon:Icons.check_circle)), SizedBox(width:12), Expanded(child: StatCard(title:'امتیاز عملکرد',value:'—',icon:Icons.trending_up))]),
-        const SizedBox(height: 16),
-        const Text('امکانات بازیکن', style: TextStyle(fontSize:18,fontWeight:FontWeight.bold)),
-        const SizedBox(height: 10),
-        GridView.count(shrinkWrap:true,physics:const NeverScrollableScrollPhysics(),crossAxisCount:2,crossAxisSpacing:10,mainAxisSpacing:10,childAspectRatio:1.25,children:const [
-          FeatureCard('برنامه تمرین',Icons.calendar_month), FeatureCard('حضور و غیاب',Icons.fact_check),
-          FeatureCard('شهریه و رسید',Icons.receipt_long), FeatureCard('گزارش پیشرفت',Icons.insights),
-          FeatureCard('پیام به مربی',Icons.chat), FeatureCard('اعلان‌ها',Icons.notifications)
-        ]),
-        const SizedBox(height:12),
-        const Card(child: Padding(padding:EdgeInsets.all(16),child:Text('نسخه آغازین رابط اندروید SenSport — اتصال حساب‌ها و ذخیره‌سازی اطلاعات در مراحل بعدی اضافه می‌شود.')))
-      ]),
-      bottomNavigationBar: NavigationBar(selectedIndex:0, destinations:const [
-        NavigationDestination(icon:Icon(Icons.home_outlined),label:'خانه'),
-        NavigationDestination(icon:Icon(Icons.bar_chart),label:'پیشرفت'),
-        NavigationDestination(icon:Icon(Icons.calendar_today),label:'تمرین'),
-        NavigationDestination(icon:Icon(Icons.person_outline),label:'پروفایل')
-      ]),
-    ));
-}
-
-class StatCard extends StatelessWidget {
-  final String title,value; final IconData icon;
-  const StatCard({super.key,required this.title,required this.value,required this.icon});
-  @override Widget build(BuildContext context)=>Card(child:Padding(padding:const EdgeInsets.all(16),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Icon(icon,color:green),const SizedBox(height:8),Text(title),Text(value,style:const TextStyle(fontSize:22,fontWeight:FontWeight.bold))])));
-}
-class FeatureCard extends StatelessWidget {
-  final String title;final IconData icon;
-  const FeatureCard(this.title,this.icon,{super.key});
-  @override Widget build(BuildContext context)=>Card(child:InkWell(onTap:(){},borderRadius:BorderRadius.circular(16),child:Padding(padding:const EdgeInsets.all(16),child:Column(mainAxisAlignment:MainAxisAlignment.center,children:[Icon(icon,size:32,color:green),const SizedBox(height:8),Text(title,style:const TextStyle(fontWeight:FontWeight.bold))]))));
+class LoginPage extends StatefulWidget{const LoginPage({super.key});@override State<LoginPage> createState()=>_LoginState();}
+class _LoginState extends State<LoginPage>{final name=TextEditingController(),pass=TextEditingController();bool coach=false;bool busy=false;
+ Future<void> go()async{setState(()=>busy=true);await Store.load();if(!mounted)return;Navigator.pushReplacement(context,MaterialPageRoute(builder:(_)=>Home(name:name.text.trim().isEmpty?(coach?'مربی':'بازیکن'):name.text.trim(),coach:coach)));setState(()=>busy=false);}
+ @override Widget build(BuildContext c)=>Scaffold(backgroundColor:navy,body:Center(child:SingleChildScrollView(padding:const EdgeInsets.all(24),child:Card(child:Padding(padding:const EdgeInsets.all(24),child:Column(mainAxisSize:MainAxisSize.min,children:[const Icon(Icons.sports_soccer,color:green,size:62),const Text('SenSport',style:TextStyle(fontSize:30,fontWeight:FontWeight.bold,color:navy)),const Text('سامانه مدیریت ورزش و تمرین'),const SizedBox(height:24),TextField(controller:name,decoration:const InputDecoration(labelText:'نام شما',prefixIcon:Icon(Icons.person))),TextField(controller:pass,obscureText:true,decoration:const InputDecoration(labelText:'رمز عبور (نسخه محلی)',prefixIcon:Icon(Icons.lock))),const SizedBox(height:12),SegmentedButton<bool>(segments:const[ButtonSegment(value:false,label:Text('بازیکن'),icon:Icon(Icons.person)),ButtonSegment(value:true,label:Text('مربی'),icon:Icon(Icons.sports))],selected:{coach},onSelectionChanged:(s)=>setState(()=>coach=s.first)),const SizedBox(height:20),FilledButton(onPressed:busy?null:go,child:Text(busy?'در حال ورود...':'ورود به برنامه'))])))));
+}}
+class Home extends StatefulWidget{final String name;final bool coach;const Home({super.key,required this.name,required this.coach});@override State<Home> createState()=>_HomeState();}
+class _HomeState extends State<Home>{int tab=0;
+ final titles=['خانه','تمرین‌ها','حضور و غیاب','شهریه و رسید','پیام‌ها','گزارش پیشرفت','پرونده‌ها'];
+ Future<void> add(String title,List<String> list,String key)async{final x=TextEditingController();await showDialog(context:context,builder:(c)=>AlertDialog(title:Text(title),content:TextField(controller:x,decoration:const InputDecoration(hintText:'عنوان یا توضیحات')) ,actions:[TextButton(onPressed:()=>Navigator.pop(c),child:const Text('لغو')),FilledButton(onPressed:(){if(x.text.trim().isNotEmpty){list.insert(0,x.text.trim());Store.save(key,list);setState((){});}Navigator.pop(c);},child:const Text('ثبت'))]));}
+ Widget listPage(String title,List<String> items,String key,IconData icon,{bool editable=true})=>Column(children:[Padding(padding:const EdgeInsets.all(12),child:Row(children:[Expanded(child:Text(title,style:const TextStyle(fontWeight:FontWeight.bold,fontSize:20))),if(editable)IconButton(onPressed:()=>add('افزودن $title',items,key),icon:const Icon(Icons.add_circle,color:green))])),Expanded(child:items.isEmpty?const Center(child:Text('هنوز موردی ثبت نشده')):ListView.builder(itemCount:items.length,itemBuilder:(c,i)=>Card(child:ListTile(leading:Icon(icon,color:green),title:Text(items[i]),trailing:editable?IconButton(icon:const Icon(Icons.delete_outline),onPressed:(){setState(()=>items.removeAt(i));Store.save(key,items);}):null))))]);
+ Widget home()=>ListView(padding:const EdgeInsets.all(16),children:[Container(padding:const EdgeInsets.all(20),decoration:BoxDecoration(color:navy,borderRadius:BorderRadius.circular(20)),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text('سلام ${widget.name} 👋',style:const TextStyle(color:Colors.white,fontSize:23,fontWeight:FontWeight.bold)),const SizedBox(height:8),Text(widget.coach?'پنل مدیریت مربی':'پنل بازیکن',style:const TextStyle(color:green)),const SizedBox(height:16),Text('تمرین‌های ثبت‌شده: ${Store.sessions.length}   •   پیام‌ها: ${Store.messages.length}',style:const TextStyle(color:Colors.white))]),const SizedBox(height:16),GridView.count(shrinkWrap:true,physics:const NeverScrollableScrollPhysics(),crossAxisCount:2,childAspectRatio:1.25,crossAxisSpacing:10,mainAxisSpacing:10,children:[tile('تمرین‌ها',Icons.calendar_month,1),tile('حضور و غیاب',Icons.fact_check,2),tile('شهریه و رسید',Icons.receipt_long,3),tile('پیام‌ها',Icons.chat,4),tile('پیشرفت',Icons.insights,5),tile('پرونده‌ها',Icons.folder,6)]),const Card(child:Padding(padding:EdgeInsets.all(14),child:Text('اطلاعات این نسخه روی همین گوشی ذخیره می‌شود. برای حساب‌های مشترک و همگام‌سازی آنلاین، سرور باید راه‌اندازی شود.'))]);
+ Widget tile(String s,IconData i,int n)=>Card(child:InkWell(onTap:()=>setState(()=>tab=n),child:Column(mainAxisAlignment:MainAxisAlignment.center,children:[Icon(i,color:green,size:32),const SizedBox(height:8),Text(s,style:const TextStyle(fontWeight:FontWeight.bold))])));
+ @override Widget build(BuildContext c){final pages=[home(),listPage('برنامه تمرین',Store.sessions,'sessions',Icons.event),listPage('حضور و غیاب',Store.attendance,'attendance',Icons.check_circle),listPage('شهریه و رسید',Store.payments,'payments',Icons.receipt),listPage('پیام‌ها',Store.messages,'messages',Icons.chat),listPage('گزارش پیشرفت',Store.notes,'notes',Icons.trending_up),listPage('پرونده بازیکنان',Store.notes,'notes',Icons.folder)];return Directionality(textDirection:TextDirection.rtl,child:Scaffold(appBar:AppBar(backgroundColor:navy,foregroundColor:Colors.white,title:Text('SenSport • ${widget.coach?'مربی':'بازیکن'}'),actions:[IconButton(onPressed:()=>Navigator.pushReplacement(context,MaterialPageRoute(builder:(_)=>const LoginPage())),icon:const Icon(Icons.logout))]),body:pages[tab],bottomNavigationBar:NavigationBar(selectedIndex:tab>3?0:tab,destinations:const[NavigationDestination(icon:Icon(Icons.home),label:'خانه'),NavigationDestination(icon:Icon(Icons.calendar_month),label:'تمرین'),NavigationDestination(icon:Icon(Icons.fact_check),label:'حضور'),NavigationDestination(icon:Icon(Icons.receipt),label:'مالی')],onDestinationSelected:(v)=>setState(()=>tab=v))));}
 }
