@@ -1,0 +1,29 @@
+name: Build SenSport Android APK
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'android_app/**'
+      - '.github/workflows/android-apk.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Flutter version
+        run: flutter --version
+        working-directory: android_app
+      - name: Get dependencies
+        run: flutter pub get
+        working-directory: android_app
+      - name: Build APK
+        run: flutter build apk --release
+        working-directory: android_app
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SenSport-Android-APK
+          path: android_app/build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 14
